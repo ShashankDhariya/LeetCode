@@ -4,32 +4,30 @@ public:
         
     }
     
-    vector<int> list;
+    set<int> list;
     void addNum(int value) {
-        list.push_back(value);
+        list.insert(value);
     }
     
     vector<vector<int>> getIntervals() {
-        set<vector<int>> ans;
-        int n = list.size();
-        sort(list.begin(), list.end());
-        auto s = list[0];
-        auto e = list.back();
-        vector<int> res = {s, e};
+        vector<vector<int>> ans;
+        int s = -1;
+        int e = -1;
 
-        for(int i=1;i<n;i++){
-            if(list[i-1] == list[i])
-                continue;
-            if(list[i-1] != list[i] - 1){
-                res[1] = list[i-1];
-                ans.insert(res);
-                res[0] = list[i];
-                res[1] = list[n-1];
+        for(auto l: list){
+            if(s < 0)
+                s = e = l;
+            
+            else if(l - e == 1)
+                e = l;
+            
+            else{
+                ans.push_back({s, e});
+                s = e = l;
             }
         }
-        ans.insert(res);
-        vector<vector<int>> a(ans.begin(), ans.end());
-        return a;
+        ans.push_back({s, e});
+        return ans;
     }
 };
 
