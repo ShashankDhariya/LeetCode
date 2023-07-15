@@ -1,0 +1,29 @@
+class Solution {
+public:
+
+    int solution(int i, int k, int& n, vector<vector<int>>& events, vector<vector<int>>& dp){
+        if(i == n || k == 0)
+            return 0;
+
+        if(dp[i][k] != -1)
+            return dp[i][k];
+
+        int j = i+1;
+        for(j=i+1;j<n;j++){
+            if(events[i][1] < events[j][0])
+                break;
+        }
+
+        int take = events[i][2] + solution(j, k-1, n, events, dp);
+        int noTake = solution(i+1, k, n, events,dp);    
+
+        return dp[i][k] = max(take, noTake);
+    }
+
+    int maxValue(vector<vector<int>>& events, int k) {
+        int n = events.size();
+        sort(events.begin(), events.end());
+        vector<vector<int>> dp(n, vector<int> (k+1, -1));
+        return solution(0, k, n, events, dp);
+    }
+};
