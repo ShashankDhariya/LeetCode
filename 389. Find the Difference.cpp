@@ -15,7 +15,23 @@ public:
 };
 
 /*
-  OR - Using Map 
+    OR - Using xor operator
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        int ans = 0;
+        
+        for(auto c: s)
+            ans ^= c;
+
+        for(auto c: t)
+            ans ^= c;
+
+        return (char)ans;
+    }
+};
+
+  OR - Using Map (Brute Force)
 class Solution {
 public:
     char findTheDifference(string s, string t) {
