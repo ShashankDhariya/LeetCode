@@ -1,6 +1,5 @@
 class Solution {
 public:
-
     int solution(int n, int k, vector<int>& dp){
         if(n == 0)
             return k > 1;
