@@ -9,6 +9,36 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+// T.C. O(N) 
+class Solution {
+public:
+    int idx = 0;
+    TreeNode* bstFromPreorder(vector<int>& preorder, int limit = INT_MAX) {
+        if(idx == preorder.size() || preorder[idx] > limit)
+            return NULL;
+
+        TreeNode* node = new TreeNode(preorder[idx++]);
+        node->left = bstFromPreorder(preorder, node->val);
+        node->right = bstFromPreorder(preorder, limit);
+
+        return node;
+    }
+};
+
+/* T.C. O(N*N)
 class Solution {
 public:
 
@@ -36,3 +66,4 @@ public:
         return solution(0, preorder.size(), preorder);
     }
 };
+*/
