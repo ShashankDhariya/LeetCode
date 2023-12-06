@@ -1,17 +1,14 @@
 class Solution {
 public:
     int totalMoney(int n) {
-        int sum = 0;
-        int a = 28;
-        int q = n / 7;
+        int ans = 0;
+        
+        int full = n / 7;
+        ans += (full * (56 + (full - 1) * 7)) / 2;
 
-        for(int i=0;i<q;i++){
-            sum += a;
-            a += 7;
-        }
+        int rem = n % 7;
+        ans += (rem * (2*(full+1) + (rem - 1))) / 2;
 
-        int r = n % 7;
-        a = (r*(2*(q+1) + (r-1)))/2;
-        return sum + a;
+        return ans;
     }
 };
