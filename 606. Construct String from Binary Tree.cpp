@@ -11,30 +11,18 @@
  */
 class Solution {
 public:
-    
-    void traverse(TreeNode* root,string& ans){
-        if(!root)
-            return;
-        
-        ans += (to_string(root->val));
-        if(root->left){
-            ans.push_back('(');
-            traverse(root->left,ans);
-            ans.push_back(')');
-        }
-        
-        if(root->right){
-            if(!root->left)
-                ans += "()";
-            ans.push_back('(');
-            traverse(root->right,ans);
-            ans.push_back(')');
-        }
-    }
-    
     string tree2str(TreeNode* root) {
-        string ans;
-        traverse(root,ans);
+        string ans = to_string(root->val);
+
+        if(!root->left && root->right)
+            ans += "()";
+
+        if(root->left)
+            ans += '(' + tree2str(root->left) + ')';
+
+        if(root->right)
+            ans += '(' + tree2str(root->right) + ')';
+
         return ans;
     }
 };
