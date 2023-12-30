@@ -1,6 +1,5 @@
 class Solution {
 public:
-
     bool solution(int i, int j, int& m, int& n, string& s, string& p, vector<vector<int>>& dp) {
         if(i == m && j == n)
             return 1;
