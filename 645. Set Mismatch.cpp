@@ -1,18 +1,21 @@
 class Solution {
 public:
     vector<int> findErrorNums(vector<int>& nums) {
-        vector<int> ans(2);
-        vector<int> res(nums.size()+1,0);
-        for(int i=0;i<nums.size();i++){
-            res[nums[i]]++;
+        int n = nums.size();
+
+        int dup = -1;
+        long long sum = 0;
+        for(int i=0;i<n;i++){
+            sum += abs(nums[i]);
+            if(nums[abs(nums[i]) - 1] < 0)
+                dup = abs(nums[i]);
+
+            else 
+                nums[abs(nums[i]) - 1] = -nums[abs(nums[i]) - 1];
         }
 
-        for(int i=1;i<res.size();i++){
-            if(res[i] == 2)
-                ans[0] = i;
-            else if(res[i] == 0)
-                ans[1] = i;
-        }
-        return ans;
+        int np = abs((n*(n+1) / 2) - (sum - dup));
+
+        return {dup, np};
     }
 };
