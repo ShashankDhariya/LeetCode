@@ -1,34 +1,28 @@
 class Solution {
 public:
+    int solution(int i, int freq, vector<string>& arr){
+        if(i == arr.size())
+            return 0;
 
-    void lengthstr(int ind, vector<int> vis, vector<string> arr, int len, int& maxLen){
-        if(ind < 0){
-            maxLen = max(maxLen, len);
-            return;
-        }
-
-        int n = arr[ind].size();
-        int flag = 0;
-        vector<int> temp = vis;
-
-        for(int i=0;i<n;i++){
-            if(temp[arr[ind][i] - 'a'] == 1){
-                flag = 1;
+        bool canTake = 1;
+        int temp = freq;
+        for(auto ch: arr[i]){
+            if(freq & (1 << (ch - 'a'))){
+                canTake = 0;
                 break;
             }
-            temp[arr[ind][i] - 'a'] = 1;
+            freq |= (1 << (ch - 'a'));
         }
 
-        if(flag == 0)
-            lengthstr(ind - 1, temp, arr, len + arr[ind].size(), maxLen);
-        lengthstr(ind - 1, vis, arr, len, maxLen);
-    }
+        int taken = 0;
+        if(canTake)
+            taken = arr[i].length() + solution(i+1, freq, arr);
+        int notTaken = solution(i+1, temp, arr);
+
+        return max(taken, notTaken);
+    } 
 
     int maxLength(vector<string>& arr) {
-        int len = 0;
-        vector<int> vis(26,0);
-        int maxLen = INT_MIN;
-        lengthstr(arr.size() - 1, vis, arr, len, maxLen);
-        return maxLen;
+        return solution(0, 0, arr);
     }
 };
