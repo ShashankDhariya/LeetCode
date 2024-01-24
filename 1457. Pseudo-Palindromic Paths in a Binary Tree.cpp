@@ -11,37 +11,25 @@
  */
 class Solution {
 public:
-    
-    int check(unordered_map<int,int>& m,int& ctr){
-        int c = 0;
-        for(auto num: m){
-            if(num.second % 2 != 0)
-                c++;
-        }
-        if(c > 1)
-            return 0;
-        return 1;
-    }
-    
-    void traverse(TreeNode* root,int& ctr,unordered_map<int,int>& m){
-        
+    int traverse(TreeNode* root, int freq){
         if(!root)
-            return;
-        m[root->val]++;
-        
-        if(!root->left && !root->right){
-            ctr += check(m,ctr);
-        }
-        
-        traverse(root->left,ctr,m);
-        traverse(root->right,ctr,m);
-        m[root->val]--;
+            return 0;
+
+        if(freq & (1 << root->val))
+            freq ^= (1 << root->val);
+        else 
+            freq |= (1 << root->val);
+
+        if(!root->left && !root->right)
+            return __builtin_popcount(freq) < 2;
+
+        int left = traverse(root->left, freq);
+        int right = traverse(root->right, freq);
+
+        return left + right;
     }
-    
+
     int pseudoPalindromicPaths (TreeNode* root) {
-        int ctr = 0;
-        unordered_map<int,int>m;
-        traverse(root,ctr,m);
-        return ctr;    
+        return traverse(root, 0);
     }
 };
