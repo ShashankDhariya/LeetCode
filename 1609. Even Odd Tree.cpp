@@ -14,43 +14,38 @@ public:
     bool isEvenOddTree(TreeNode* root) {
         queue<TreeNode*> q;
         q.push(root);
-        int level = 0;
 
+        int level = 0;
         while(!q.empty()){
             int size = q.size();
-            vector<int> res;
+            int even = 0;
+            int odd = 1e7;
             for(int i=0;i<size;i++){
                 auto curr = q.front();
-                res.push_back(curr->val);
                 q.pop();
+
+                if((level % 2) == 0){
+                    if(even >= curr->val || (curr->val % 2) == 0)
+                        return 0;
+                    even = curr->val;
+                }
+
+                else {
+                    if(odd <= curr->val || (curr->val % 2) == 1)
+                        return 0;
+                    odd = curr->val;
+                }
+
                 if(curr->left)
                     q.push(curr->left);
+
                 if(curr->right)
                     q.push(curr->right);
             }
 
-            for(int i=0;i<res.size();i++){
-                if(level % 2 == 0){
-                    if(res[i] % 2 == 0)
-                        return false;
-                }
-                else {
-                    if(res[i] % 2 != 0)
-                        return false;
-                }
-            }
-            for(int i=1;i<res.size();i++){
-                if(level % 2 == 0){
-                    if(res[i-1] >= res[i])
-                        return false;
-                }
-                else {
-                    if(res[i-1] <= res[i])
-                        return false;
-                }
-            }
             level++;
         }
-        return true;
+
+        return 1;
     }
 };
