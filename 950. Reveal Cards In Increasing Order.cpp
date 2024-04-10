@@ -19,7 +19,7 @@ public:
                 dq.pop_front();
             }
         }
-
+        
         return ans;
     }
 };
