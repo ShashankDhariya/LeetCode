@@ -1,38 +1,71 @@
 class Solution {
 public:
+
+    struct trie{
+        trie* links[26];
+        bool isEnd = 0;
+
+        bool contains(int idx){
+            return links[idx] != NULL;
+        }
+
+        void putChar(int idx, trie* node){
+            links[idx] = node;
+        }
+    };
+
     string replaceWords(vector<string>& dictionary, string sentence) {
-        sort(dictionary.begin(), dictionary.end(), [&](string &a, string& b){
-            return a.length() < b.length();
-        });
+        trie* node = new trie();
+        for(auto dict: dictionary){
+            trie* curr = node;
+            for(auto ch: dict){
+                if(!curr->contains(ch - 'a')) {
+                    curr->putChar(ch - 'a', new trie());
+                    curr = curr->links[ch - 'a'];
+                }
+
+                else 
+                    curr = curr->links[ch - 'a'];
+            }
+            curr->isEnd = 1;
+        }
 
         string ans = "";
-        string word = "";
-        int n = sentence.length();
+
+        int n = sentence.size();
         for(int i=0;i<n;i++){
-            if(i != n-1 && sentence[i] != ' '){
-                word += sentence[i];
-                continue;
-            }
+            bool found = 0;
+            bool notFound = 0;
+            trie* curr = node;
+            string word = "";
+            while(i < n && sentence[i] != ' ') {
+                if(found)
+                    i++;
 
-            if(i == n-1)
-                word += sentence[i];
+                else if(notFound){
+                    word += sentence[i];
+                    i++;
+                }
 
-            bool yes = 1;
-            for(auto dict: dictionary){
-                if(dict.length() > word.length())
-                    break;
+                else if(curr->isEnd){
+                    found = 1;
+                    i++;
+                }
 
-                int size = dict.length();
-                if(dict == word.substr(0, size)){
-                    ans += dict;
-                    yes = 0;
-                    break;
+                else if(!curr->contains(sentence[i] - 'a')){
+                    notFound = 1;
+                    word += sentence[i];
+                    i++;
+                }
+
+                else {
+                    curr = curr->links[sentence[i] - 'a'];
+                    word += sentence[i];
+                    i++;
                 }
             }
-            if(yes)
-                ans += word;
-            ans += ' ';
-            word = "";
+            
+            ans += (word + " ");
         }
 
         ans.pop_back();
